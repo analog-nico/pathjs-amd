@@ -1,0 +1,10 @@
+{
+  "name": "pathjs-amd",
+  "version": "0.9.0",
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": "~0.10"
+  },
+  "private": true
+}
