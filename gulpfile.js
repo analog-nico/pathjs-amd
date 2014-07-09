@@ -7,6 +7,7 @@ var jshintStylish = require('jshint-stylish');
 var karma = require('karma').server;
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var fs = require('fs');
 
 
 var paths = {
@@ -103,4 +104,97 @@ gulp.task('dist-src-min', function () {
             path.basename += '.min';
         }))
         .pipe(gulp.dest('./dist/'));
+});
+
+gulp.task('ci', function (done) {
+    runSequence('lint', 'test', 'coveralls', 'test-on-saucelabs', done);
+});
+
+gulp.task('coveralls', function () {
+   // TODO
+});
+
+gulp.task('test-on-saucelabs', function (done) {
+
+    // https://github.com/saucelabs/karma-sauce-example
+
+    // Use ENV vars on Travis and sauce.json locally to get credentials
+    if (!process.env.SAUCE_USERNAME) {
+        if (!fs.existsSync('sauce.json')) {
+            console.log('Create a sauce.json with your credentials based on the sauce-sample.json file.');
+            process.exit(1);
+        } else {
+            process.env.SAUCE_USERNAME = require('./sauce').username;
+            process.env.SAUCE_ACCESS_KEY = require('./sauce').accessKey;
+        }
+    }
+
+    // Browsers to run on Sauce Labs
+    var customLaunchers = {
+        'SL_Chrome': {
+            base: 'SauceLabs',
+            browserName: 'chrome'
+        },
+        'SL_Firefox': {
+            base: 'SauceLabs',
+            browserName: 'firefox',
+            version: '26'
+        },
+        'SL_Safari': {
+            base: 'SauceLabs',
+            browserName: 'safari',
+            platform: 'OS X 10.9',
+            version: '7'
+        },
+        'SL_IE_9': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows 2008',
+            version: '9'
+        },
+        'SL_IE_10': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows 2012',
+            version: '10'
+        },
+        'SL_IE_11': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows 8.1',
+            version: '11'
+        }
+    };
+
+    // http://karma-runner.github.io/0.12/config/configuration-file.html
+
+    var config = {
+        frameworks: ['jasmine'],
+        files: [
+            paths.scripts,
+            paths.fixtureScripts,
+            paths.fixtureTemplates,
+            paths.specs
+        ],
+        preprocessors: {
+            '**/*.html': 'html2js'
+        },
+        reporters: ['spec', 'saucelabs'],
+        plugins: [
+            'karma-jasmine',
+            'karma-html2js-preprocessor',
+            'karma-spec-reporter',
+            'karma-sauce-launcher'
+        ],
+        autoWatch: false,
+        singleRun: true,
+        sauceLabs: {
+            testName: 'All tests'
+        },
+        customLaunchers: customLaunchers,
+        browsers: Object.keys(customLaunchers)
+    };
+
+    karma.start(config, done);
+
 });
