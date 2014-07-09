@@ -1,0 +1,19 @@
+{
+    "name": "pathjs-amd",
+    "description": "PathJS is a lightweight, client-side routing library that allows you to create single page apps using Hashbangs and/or HTML5 pushState.",
+    "main": "src/path.js",
+    "license": "MIT",
+    "keywords": ["pathjs", "path.js", "router", "route", "routes", "routing", "hashbang", "pushState"],
+    "authors": [
+        "Nicolai Kamenzky (https://github.com/analog-nico)"
+    ],
+    "homepage": "https://github.com/analog-nico/pathjs-amd",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/analog-nico/pathjs-amd.git"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "requirejs": "~2.1.14"
+    }
+}
