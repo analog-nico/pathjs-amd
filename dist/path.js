@@ -2,7 +2,7 @@
 ;(function (root, factory) {
     'use strict';
     if (typeof define === 'function' && define.amd) {
-        define(['path'], function () {
+        define('path', function () {
             root.Path = factory();
             return root.Path;
         });
@@ -13,7 +13,7 @@
     'use strict';
 
     var Path = {
-        'version': "0.9.0",
+        'version': "0.9.1",
         'map': function (path) {
             if (Path.routes.defined.hasOwnProperty(path)) {
                 return Path.routes.defined[path];

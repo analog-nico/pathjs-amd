@@ -19,6 +19,8 @@ Additionally it also exposes itself as an AMD module (named 'path') if a module 
 
 # Change History
 
+- 0.9.1 (2014-07-09)
+    - Fixed AMD definition
 - 0.9.0 (2014-07-09)
 	- Cloned [mtrpcic/pathjs](https://github.com/mtrpcic/pathjs)
 	- Wrapped the module to also expose it as an AMD module (named 'path') if a module loader is present
