@@ -2,7 +2,7 @@
 
 PathJS is a lightweight, client-side routing library that allows you to create "single page" applications using Hashbangs and/or HTML5 pushState.
 
-[![Build Status](https://travis-ci.org/analog-nico/pathjs-amd.svg?branch=master)](https://travis-ci.org/analog-nico/pathjs-amd) [![Coverage Status](https://img.shields.io/coveralls/analog-nico/pathjs-amd.svg?branch=master)](https://coveralls.io/r/analog-nico/pathjs-amd?branch=master)
+[![Build Status](https://travis-ci.org/analog-nico/pathjs-amd.svg?branch=master)](https://travis-ci.org/analog-nico/pathjs-amd) [![Coverage Status](https://img.shields.io/coveralls/analog-nico/pathjs-amd.svg?branch=master)](https://coveralls.io/r/analog-nico/pathjs-amd?branch=master) [![Code Climate](https://codeclimate.com/github/analog-nico/pathjs-amd.png)](https://codeclimate.com/github/analog-nico/pathjs-amd)
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/analog-nico.svg)](https://saucelabs.com/u/analog-nico)
 

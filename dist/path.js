@@ -3,7 +3,8 @@
     'use strict';
     if (typeof define === 'function' && define.amd) {
         define(['path'], function () {
-            return (root.Path = factory());
+            root.Path = factory();
+            return root.Path;
         });
     } else {
         root.Path = factory();
