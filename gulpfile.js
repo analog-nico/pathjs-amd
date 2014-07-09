@@ -107,7 +107,7 @@ gulp.task('dist-src-min', function () {
 });
 
 gulp.task('ci', function (done) {
-    runSequence('lint', 'test', 'coveralls', 'test-on-saucelabs', done);
+    runSequence('lint', 'test', 'coveralls', done);
 });
 
 gulp.task('coveralls', function () {
