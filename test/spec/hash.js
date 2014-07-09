@@ -126,7 +126,9 @@ describe('The hash routes', function () {
             timer = setInterval(run_route, 100);
         }
 
-        define_routes();
+        setTimeout(function () {
+            define_routes();
+        }, 100);
 
     });
 

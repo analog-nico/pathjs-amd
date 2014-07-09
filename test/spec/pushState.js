@@ -123,7 +123,7 @@ describe('The pushState routes', function () {
 
             Path.history.listen();
 
-            timer = setInterval(run_route, 0);
+            timer = setInterval(run_route, 100);
         }
 
         define_routes();
