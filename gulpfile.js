@@ -5,7 +5,7 @@ var gulp = require('gulp');
 var runSequence = require('run-sequence');
 var jshint = require('gulp-jshint');
 var jshintStylish = require('jshint-stylish');
-var karma = require('karma').server;
+var karma = require('gulp-karma');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var fs = require('fs');
@@ -55,7 +55,7 @@ gulp.task('lint', function () {
 
 });
 
-gulp.task('test', function (done) {
+gulp.task('test', function () {
 
   // http://karma-runner.github.io/0.12/config/configuration-file.html
 
@@ -88,7 +88,8 @@ gulp.task('test', function (done) {
   };
   config.preprocessors[paths.scripts] = 'coverage';
 
-  karma.start(config, done);
+  return gulp.src(config.files)
+    .pipe(karma(config));
 
 });
 
@@ -123,12 +124,12 @@ gulp.task('coveralls', function () {
         .pipe(coveralls());
 });
 
-gulp.task('test-on-saucelabs', function (done) {
+gulp.task('test-on-saucelabs', function () {
 
     // https://github.com/saucelabs/karma-sauce-example
 
     // Use ENV vars on Travis and sauce.json locally to get credentials
-    /*if (!process.env.SAUCE_USERNAME) {
+    if (!process.env.SAUCE_USERNAME) {
         if (!fs.existsSync('sauce.json')) {
             console.log('Create a sauce.json with your credentials based on the sauce-sample.json file.');
             process.exit(1);
@@ -136,7 +137,7 @@ gulp.task('test-on-saucelabs', function (done) {
             process.env.SAUCE_USERNAME = require('./sauce').username;
             process.env.SAUCE_ACCESS_KEY = require('./sauce').accessKey;
         }
-    }*/
+    }
 
     // Browsers to run on Sauce Labs
     var customLaunchers = {
@@ -204,6 +205,7 @@ gulp.task('test-on-saucelabs', function (done) {
         browsers: Object.keys(customLaunchers)
     };
 
-    karma.start(config, done);
+    return gulp.src(config.files)
+        .pipe(karma(config));
 
 });
