@@ -5,6 +5,8 @@
   "devDependencies": {
     "gulp": "^3.8.5",
     "gulp-jshint": "^1.7.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglify": "^0.3.1",
     "jshint-stylish": "^0.3.0",
     "karma": "^0.12.16",
     "karma-coverage": "^0.2.4",
@@ -12,6 +14,7 @@
     "karma-jasmine": "^0.2.2",
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-spec-reporter": "0.0.13",
+    "rimraf": "^2.2.8",
     "run-sequence": "^0.3.6"
   },
   "engines": {

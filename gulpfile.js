@@ -5,6 +5,8 @@ var runSequence = require('run-sequence');
 var jshint = require('gulp-jshint');
 var jshintStylish = require('jshint-stylish');
 var karma = require('karma').server;
+var uglify = require('gulp-uglify');
+var rename = require('gulp-rename');
 
 
 var paths = {
@@ -79,4 +81,26 @@ gulp.task('test', function (done) {
 
   karma.start(config, done);
 
+});
+
+gulp.task('dist', function (done) {
+    runSequence('dist-clean', 'dist-src', 'dist-src-min', done);
+});
+
+gulp.task('dist-clean', function (done) {
+    (require('rimraf'))('./dist', done);
+});
+
+gulp.task('dist-src', function () {
+    return gulp.src('./src/*.js')
+        .pipe(gulp.dest('./dist/'));
+});
+
+gulp.task('dist-src-min', function () {
+    return gulp.src('./src/*.js')
+        .pipe(uglify())
+        .pipe(rename(function (path) {
+            path.basename += '.min';
+        }))
+        .pipe(gulp.dest('./dist/'));
 });
