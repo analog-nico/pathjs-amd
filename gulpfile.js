@@ -1,3 +1,4 @@
+/* jshint node: true */
 'use strict';
 
 var gulp = require('gulp');
@@ -28,7 +29,8 @@ gulp.task('watch', function () {
     paths.scripts,
     paths.specs,
     paths.fixtureScripts,
-    paths.fixtureTemplates
+    paths.fixtureTemplates,
+    'gulpfile.js'
   ], [
     'lint-and-test'
   ]);
@@ -44,7 +46,8 @@ gulp.task('lint', function () {
   return gulp.src([
       paths.scripts,
       paths.specs,
-      paths.fixtureScripts
+      paths.fixtureScripts,
+      'gulpfile.js'
     ])
     .pipe(jshint())
     .pipe(jshint.reporter(jshintStylish))
