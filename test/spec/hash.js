@@ -123,7 +123,7 @@ describe('The hash routes', function () {
 
             Path.root("#F");
             Path.listen();
-            timer = setInterval(run_route, 0);
+            timer = setInterval(run_route, 100);
         }
 
         define_routes();
