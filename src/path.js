@@ -1,4 +1,6 @@
+/* global define */
 ;(function (root, factory) {
+    'use strict';
     if (typeof define === 'function' && define.amd) {
         define(['path'], function () {
             return (root.Path = factory());
@@ -7,6 +9,7 @@
         root.Path = factory();
     }
 }(this, function () {
+    'use strict';
 
     var Path = {
         'version': "0.9.0",
@@ -37,9 +40,11 @@
                 }
             },
             'popState': function (event) {
-                var initialPop = !Path.history.initial.popped && location.href == Path.history.initial.URL;
+                var initialPop = !Path.history.initial.popped && location.href === Path.history.initial.URL;
                 Path.history.initial.popped = true;
-                if (initialPop) return;
+                if (initialPop) {
+                    return;
+                }
                 Path.dispatch(document.location.pathname);
             },
             'listen': function (fallback) {
@@ -47,12 +52,13 @@
                 Path.history.fallback = fallback;
 
                 if (Path.history.supported) {
-                    Path.history.initial.popped = ('state' in window.history), Path.history.initial.URL = location.href;
+                    Path.history.initial.popped = (('state' in window.history) ? true : false);
+                    Path.history.initial.URL = location.href;
                     window.onpopstate = Path.history.popState;
                 } else {
                     if (Path.history.fallback) {
-                        for (route in Path.routes.defined) {
-                            if (route.charAt(0) != "#") {
+                        for (var route in Path.routes.defined) {
+                            if (route.charAt(0) !== "#") {
                                 Path.routes.defined["#" + route] = Path.routes.defined[route];
                                 Path.routes.defined["#" + route].path = "#" + route;
                             }
@@ -68,11 +74,11 @@
                 if (route !== null && route !== undefined) {
                     route = Path.routes.defined[route];
                     possible_routes = route.partition();
-                    for (j = 0; j < possible_routes.length; j++) {
+                    for (j = 0; j < possible_routes.length; j+=1) {
                         slice = possible_routes[j];
                         compare = path;
                         if (slice.search(/:/) > 0) {
-                            for (i = 0; i < slice.split("/").length; i++) {
+                            for (i = 0; i < slice.split("/").length; i+=1) {
                                 if ((i < compare.split("/").length) && (slice.split("/")[i].charAt(0) === ":")) {
                                     params[slice.split('/')[i].replace(/:/, '')] = compare.split("/")[i];
                                     compare = compare.replace(compare.split("/")[i], slice.split("/")[i]);
@@ -117,7 +123,7 @@
         'listen': function () {
             var fn = function () {
                 Path.dispatch(location.hash);
-            }
+            };
 
             if (location.hash === "") {
                 if (Path.routes.root !== null) {
@@ -174,11 +180,11 @@
         },
         'partition': function () {
             var parts = [], options = [], re = /\(([^}]+?)\)/g, text, i;
-            while (text = re.exec(this.path)) {
+            while ((text = re.exec(this.path))) {
                 parts.push(text[1]);
             }
             options.push(this.path.split("(")[0]);
-            for (i = 0; i < parts.length; i++) {
+            for (i = 0; i < parts.length; i+=1) {
                 options.push(options[options.length - 1] + parts[i]);
             }
             return options;
@@ -188,7 +194,7 @@
 
             if (Path.routes.defined[this.path].hasOwnProperty("do_enter")) {
                 if (Path.routes.defined[this.path].do_enter.length > 0) {
-                    for (i = 0; i < Path.routes.defined[this.path].do_enter.length; i++) {
+                    for (i = 0; i < Path.routes.defined[this.path].do_enter.length; i+=1) {
                         result = Path.routes.defined[this.path].do_enter[i].apply(this, null);
                         if (result === false) {
                             halt_execution = true;
