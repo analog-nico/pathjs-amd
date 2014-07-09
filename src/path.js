@@ -14,37 +14,37 @@ var Path = {
         Path.routes.rescue = fn;
     },
     'history': {
-        'initial':{}, // Empty container for "Initial Popstate" checking variables.
-        'pushState': function(state, title, path){
-            if(Path.history.supported){
-                if(Path.dispatch(path)){
+        'initial': {}, // Empty container for "Initial Popstate" checking variables.
+        'pushState': function (state, title, path) {
+            if (Path.history.supported) {
+                if (Path.dispatch(path)) {
                     history.pushState(state, title, path);
                 }
             } else {
-                if(Path.history.fallback){
+                if (Path.history.fallback) {
                     window.location.hash = "#" + path;
                 }
             }
         },
-        'popState': function(event){
+        'popState': function (event) {
             var initialPop = !Path.history.initial.popped && location.href == Path.history.initial.URL;
             Path.history.initial.popped = true;
-            if(initialPop) return;
+            if (initialPop) return;
             Path.dispatch(document.location.pathname);
         },
-        'listen': function(fallback){
+        'listen': function (fallback) {
             Path.history.supported = !!(window.history && window.history.pushState);
-            Path.history.fallback  = fallback;
+            Path.history.fallback = fallback;
 
-            if(Path.history.supported){
+            if (Path.history.supported) {
                 Path.history.initial.popped = ('state' in window.history), Path.history.initial.URL = location.href;
                 window.onpopstate = Path.history.popState;
             } else {
-                if(Path.history.fallback){
-                    for(route in Path.routes.defined){
-                        if(route.charAt(0) != "#"){
-                          Path.routes.defined["#"+route] = Path.routes.defined[route];
-                          Path.routes.defined["#"+route].path = "#"+route;
+                if (Path.history.fallback) {
+                    for (route in Path.routes.defined) {
+                        if (route.charAt(0) != "#") {
+                            Path.routes.defined["#" + route] = Path.routes.defined[route];
+                            Path.routes.defined["#" + route].path = "#" + route;
                         }
                     }
                     Path.listen();
@@ -105,7 +105,9 @@ var Path = {
         }
     },
     'listen': function () {
-        var fn = function(){ Path.dispatch(location.hash); }
+        var fn = function () {
+            Path.dispatch(location.hash);
+        }
 
         if (location.hash === "") {
             if (Path.routes.root !== null) {
@@ -121,7 +123,7 @@ var Path = {
             setInterval(fn, 50);
         }
 
-        if(location.hash !== "") {
+        if (location.hash !== "") {
             Path.dispatch(location.hash);
         }
     },
