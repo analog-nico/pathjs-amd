@@ -8,6 +8,7 @@ var karma = require('karma').server;
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var fs = require('fs');
+var coveralls = require('gulp-coveralls');
 
 
 var paths = {
@@ -67,6 +68,10 @@ gulp.task('test', function (done) {
       '**/*.html': 'html2js'
     },
     reporters: ['spec', 'coverage'],
+    coverageReporter: {
+      type : 'lcov',
+      dir : 'coverage/'
+    },
     plugins: [
       'karma-jasmine',
       'karma-html2js-preprocessor',
@@ -111,7 +116,8 @@ gulp.task('ci', function (done) {
 });
 
 gulp.task('coveralls', function () {
-   // TODO
+    gulp.src('coverage/**/lcov.info')
+        .pipe(coveralls());
 });
 
 gulp.task('test-on-saucelabs', function (done) {
