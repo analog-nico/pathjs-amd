@@ -14,6 +14,7 @@ var coveralls = require('gulp-coveralls');
 
 var paths = {
   requirejs: 'bower_components/requirejs/require.js',
+  jquery: 'bower_components/jquery/dist/jquery.js',
   scripts: 'src/**/*.js',
   specs: 'test/spec/**/*.js',
   fixtureScripts: 'test/fixtures/**/*.js',
@@ -29,10 +30,15 @@ gulp.task('watch', function () {
     paths.scripts,
     paths.specs,
     paths.fixtureScripts,
-    paths.fixtureTemplates,
-    'gulpfile.js'
+    paths.fixtureTemplates
   ], [
     'lint-and-test'
+  ]);
+
+  gulp.watch([
+    'gulpfile.js'
+  ], [
+    'lint'
   ]);
 
 });
@@ -62,6 +68,7 @@ gulp.task('test', function () {
   var config = {
     frameworks: ['jasmine'],
     files: [
+      paths.jquery,
       paths.scripts,
       paths.fixtureScripts,
       paths.fixtureTemplates,
@@ -159,7 +166,7 @@ gulp.task('test-on-saucelabs', function () {
         'SL_IE_9': {
             base: 'SauceLabs',
             browserName: 'internet explorer',
-            platform: 'Windows 2008',
+            platform: 'Windows 7',
             version: '9'
         },
         'SL_IE_10': {
@@ -181,6 +188,7 @@ gulp.task('test-on-saucelabs', function () {
     var config = {
         frameworks: ['jasmine'],
         files: [
+            paths.jquery,
             paths.scripts,
             paths.fixtureScripts,
             paths.fixtureTemplates,
@@ -199,7 +207,8 @@ gulp.task('test-on-saucelabs', function () {
         autoWatch: false,
         singleRun: true,
         sauceLabs: {
-            testName: 'All tests'
+            testName: 'All tests',
+            startConnect: false // Either install and run Sauce Connect or set this to true
         },
         customLaunchers: customLaunchers,
         browsers: Object.keys(customLaunchers)
