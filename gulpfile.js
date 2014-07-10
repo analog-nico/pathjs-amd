@@ -91,7 +91,10 @@ gulp.task('test', function () {
     ],
     autoWatch: false,
     singleRun: true,
-    browsers: ['PhantomJS']
+    browsers: ['PhantomJS'],
+    client: {
+      useIframe: false
+    }
   };
   config.preprocessors[paths.scripts] = 'coverage';
 
@@ -197,7 +200,8 @@ gulp.task('test-on-saucelabs', function () {
         preprocessors: {
             '**/*.html': 'html2js'
         },
-        reporters: ['spec', 'saucelabs'],
+        // Spec reporter crashes in IE 9 if not using an iframe. Maybe because some Polyfills are missing.
+        reporters: ['dots', 'saucelabs'],
         plugins: [
             'karma-jasmine',
             'karma-html2js-preprocessor',
@@ -211,7 +215,10 @@ gulp.task('test-on-saucelabs', function () {
             startConnect: false // Either install and run Sauce Connect or set this to true
         },
         customLaunchers: customLaunchers,
-        browsers: Object.keys(customLaunchers)
+        browsers: Object.keys(customLaunchers),
+        client: {
+            useIframe: false // Required by IE 9 to allow using the back button
+        }
     };
 
     return gulp.src(config.files)
