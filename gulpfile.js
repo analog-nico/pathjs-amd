@@ -287,12 +287,6 @@ gulp.task('test-on-saucelabs-oldies', function () {
             platform: 'Windows XP',
             version: '8'
         },
-        'SL_IE_7': {
-            base: 'SauceLabs',
-            browserName: 'internet explorer',
-            platform: 'Windows XP',
-            version: '7'
-        },
         'SL_IE_6': {
             base: 'SauceLabs',
             browserName: 'internet explorer',
@@ -308,6 +302,7 @@ gulp.task('test-on-saucelabs-oldies', function () {
         browsers: Object.keys(customLaunchers),
         client: {
             useIframe: false // Required by IE 9 to allow using the back button
+            // BTW, IE 10 & 11 currently error out when using a new window.
         }
     });
     // Spec reporter crashes in IE 9 if not using an iframe. Maybe because some Polyfills are missing.
