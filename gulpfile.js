@@ -216,9 +216,9 @@ gulp.task('test-on-saucelabs', function () {
         },
         customLaunchers: customLaunchers,
         browsers: Object.keys(customLaunchers),
-        client: {
-            useIframe: false // Required by IE 9 to allow using the back button
-        },
+//        client: {
+//            useIframe: false // Required by IE 9 to allow using the back button
+//        },
         // to avoid DISCONNECTED messages when connecting to Saucelabs
         // http://oligofren.wordpress.com/2014/05/27/running-karma-tests-on-browserstack/
         browserDisconnectTimeout : 10000, // default 2000
@@ -254,7 +254,7 @@ gulp.task('test-on-browserstack', function () {
             browser: 'chrome',
             os: 'OS X',
             os_version: 'Mountain Lion'
-        },
+        }/*,
         'BS_Safari': {
             base: 'BrowserStack',
             browser: 'safari',
@@ -287,7 +287,7 @@ gulp.task('test-on-browserstack', function () {
             browser_version: '11.0',
             os: 'Windows',
             os_version: '8.1'
-        }
+        }*/
     };
 
     // http://karma-runner.github.io/0.12/config/configuration-file.html
