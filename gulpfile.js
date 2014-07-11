@@ -136,7 +136,7 @@ gulp.task('dist-src-min', function () {
 });
 
 gulp.task('ci', function (done) {
-    runSequence('lint', 'test', 'coveralls', 'test-on-saucelabs', done);
+    runSequence('lint', 'test', 'coveralls', 'test-on-saucelabs', 'test-on-saucelabs-oldies', done);
 });
 
 gulp.task('coveralls', function () {
@@ -144,9 +144,7 @@ gulp.task('coveralls', function () {
         .pipe(coveralls());
 });
 
-gulp.task('test-on-saucelabs', function () {
-
-    // https://github.com/saucelabs/karma-sauce-example
+function loadSaucelabsCredentials() {
 
     // Use ENV vars on Travis and sauce.json locally to get credentials
     if (!process.env.SAUCE_USERNAME) {
@@ -158,6 +156,31 @@ gulp.task('test-on-saucelabs', function () {
             process.env.SAUCE_ACCESS_KEY = require('./sauce').accessKey;
         }
     }
+
+}
+
+var karmaSaucelabsConfig = mergeConfig(karmaCommonConfig, {
+    reporters: ['saucelabs'],
+    plugins: [
+        'karma-sauce-launcher'
+    ],
+    sauceLabs: {
+        testName: 'All tests',
+        startConnect: ((process.env.TRAVIS) ? true : false) // Either install and run Sauce Connect or set this to true
+    },
+    // to avoid DISCONNECTED messages when connecting to Saucelabs
+    // http://oligofren.wordpress.com/2014/05/27/running-karma-tests-on-browserstack/
+    browserDisconnectTimeout: 10000, // default 2000
+    browserDisconnectTolerance: 1, // default 0
+    browserNoActivityTimeout: 4 * 60 * 1000, //default 10000
+    captureTimeout: 4 * 60 * 1000 //default 60000
+});
+
+gulp.task('test-on-saucelabs', function () {
+
+    // https://github.com/saucelabs/karma-sauce-example
+
+    loadSaucelabsCredentials();
 
     // Browsers to run on Sauce Labs
     var customLaunchers = {
@@ -176,12 +199,6 @@ gulp.task('test-on-saucelabs', function () {
             platform: 'OS X 10.9',
             version: '7'
         },
-        'SL_IE_9': {
-            base: 'SauceLabs',
-            browserName: 'internet explorer',
-            platform: 'Windows 7',
-            version: '9'
-        },
         'SL_IE_10': {
             base: 'SauceLabs',
             browserName: 'internet explorer',
@@ -198,44 +215,43 @@ gulp.task('test-on-saucelabs', function () {
 
     // http://karma-runner.github.io/0.12/config/configuration-file.html
 
-    var config = {
-        frameworks: ['jasmine'],
-        files: [
-            paths.jquery,
-            paths.scripts,
-            paths.fixtureScripts,
-            paths.fixtureTemplates,
-            paths.specs
-        ],
-        preprocessors: {
-            '**/*.html': 'html2js'
-        },
-        // Spec reporter crashes in IE 9 if not using an iframe. Maybe because some Polyfills are missing.
-        reporters: ['dots', 'saucelabs'],
-        plugins: [
-            'karma-jasmine',
-            'karma-html2js-preprocessor',
-            'karma-spec-reporter',
-            'karma-sauce-launcher'
-        ],
-        autoWatch: false,
-        singleRun: true,
-        sauceLabs: {
-            testName: 'All tests',
-            startConnect: ((process.env.TRAVIS) ? true : false) // Either install and run Sauce Connect or set this to true
-        },
+    var config = mergeConfig(karmaSaucelabsConfig, {
+        customLaunchers: customLaunchers,
+        browsers: Object.keys(customLaunchers)
+    });
+
+    return gulp.src(config.files)
+        .pipe(karma(config));
+
+});
+
+gulp.task('test-on-saucelabs-oldies', function () {
+
+    // https://github.com/saucelabs/karma-sauce-example
+
+    loadSaucelabsCredentials();
+
+    // Browsers to run on Sauce Labs
+    var customLaunchers = {
+        'SL_IE_9': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows 7',
+            version: '9'
+        }
+    };
+
+    // http://karma-runner.github.io/0.12/config/configuration-file.html
+
+    var config = mergeConfig(karmaSaucelabsConfig, {
         customLaunchers: customLaunchers,
         browsers: Object.keys(customLaunchers),
-//        client: {
-//            useIframe: false // Required by IE 9 to allow using the back button
-//        },
-        // to avoid DISCONNECTED messages when connecting to Saucelabs
-        // http://oligofren.wordpress.com/2014/05/27/running-karma-tests-on-browserstack/
-        browserDisconnectTimeout: 10000, // default 2000
-        browserDisconnectTolerance: 1, // default 0
-        browserNoActivityTimeout: 4 * 60 * 1000, //default 10000
-        captureTimeout: 4 * 60 * 1000 //default 60000
-    };
+        client: {
+            useIframe: false // Required by IE 9 to allow using the back button
+        }
+    });
+    // Spec reporter crashes in IE 9 if not using an iframe. Maybe because some Polyfills are missing.
+    config.reporters = ['dots', 'saucelabs'];
 
     return gulp.src(config.files)
         .pipe(karma(config));

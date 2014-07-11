@@ -2,11 +2,7 @@
 describe('The hash routes', function () {
     'use strict';
 
-    it('Just a test for checking Saucelabs reliability', function () {
-        expect(true).toBe(true);
-    });
-
-    xit('should work according to the original test suite', function (done) {
+    it('should work according to the original test suite', function (done) {
 
         var hrefs = [
             "#A",
