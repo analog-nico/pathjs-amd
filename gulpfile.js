@@ -218,7 +218,13 @@ gulp.task('test-on-saucelabs', function () {
         browsers: Object.keys(customLaunchers),
         client: {
             useIframe: false // Required by IE 9 to allow using the back button
-        }
+        },
+        // to avoid DISCONNECTED messages when connecting to Saucelabs
+        // http://oligofren.wordpress.com/2014/05/27/running-karma-tests-on-browserstack/
+        browserDisconnectTimeout : 10000, // default 2000
+        browserDisconnectTolerance : 1, // default 0
+        browserNoActivityTimeout : 4*60*1000, //default 10000
+        captureTimeout : 4*60*1000 //default 60000
     };
 
     return gulp.src(config.files)
@@ -312,7 +318,13 @@ gulp.task('test-on-browserstack', function () {
         browsers: Object.keys(customLaunchers),
         client: {
             useIframe: false // Required by IE 9 to allow using the back button
-        }
+        },
+        // to avoid DISCONNECTED messages when connecting to BrowserStack
+        // http://oligofren.wordpress.com/2014/05/27/running-karma-tests-on-browserstack/
+        browserDisconnectTimeout : 10000, // default 2000
+        browserDisconnectTolerance : 1, // default 0
+        browserNoActivityTimeout : 4*60*1000, //default 10000
+        captureTimeout : 4*60*1000 //default 60000
     };
 
     return gulp.src(config.files)
