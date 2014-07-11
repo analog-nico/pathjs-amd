@@ -1,6 +1,7 @@
 /* jshint node: true */
 'use strict';
 
+var _ = require('lodash');
 var gulp = require('gulp');
 var runSequence = require('run-sequence');
 var jshint = require('gulp-jshint');
@@ -20,6 +21,35 @@ var paths = {
   fixtureScripts: 'test/fixtures/**/*.js',
   fixtureTemplates: 'test/fixtures/**/*.html'
 };
+
+var karmaCommonConfig = {
+    frameworks: ['jasmine'],
+    files: [
+        paths.jquery,
+        paths.scripts,
+        paths.fixtureScripts,
+        paths.fixtureTemplates,
+        paths.specs
+    ],
+    preprocessors: {
+        '**/*.html': 'html2js'
+    },
+    reporters: ['spec'],
+    plugins: [
+        'karma-jasmine',
+        'karma-html2js-preprocessor',
+        'karma-phantomjs-launcher',
+        'karma-spec-reporter'
+    ],
+    autoWatch: false,
+    singleRun: true
+};
+
+function mergeConfig(commonConfig, individualConfig) {
+    return _.merge(_.cloneDeep(commonConfig), individualConfig, function(a, b) {
+        return _.isArray(a) ? a.concat(b) : undefined;
+    });
+}
 
 
 gulp.task('dev', ['watch', 'lint-and-test']);
@@ -65,37 +95,17 @@ gulp.task('test', function () {
 
   // http://karma-runner.github.io/0.12/config/configuration-file.html
 
-  var config = {
-    frameworks: ['jasmine'],
-    files: [
-      paths.jquery,
-      paths.scripts,
-      paths.fixtureScripts,
-      paths.fixtureTemplates,
-      paths.specs
-    ],
-    preprocessors: {
-      '**/*.html': 'html2js'
-    },
-    reporters: ['spec', 'coverage'],
+  var config = mergeConfig(karmaCommonConfig, {
+    reporters: ['coverage'],
     coverageReporter: {
       type : 'lcov',
       dir : 'coverage/'
     },
     plugins: [
-      'karma-jasmine',
-      'karma-html2js-preprocessor',
-      'karma-phantomjs-launcher',
-      'karma-spec-reporter',
       'karma-coverage'
     ],
-    autoWatch: false,
-    singleRun: true,
-    browsers: ['PhantomJS'],
-    client: {
-      useIframe: false
-    }
-  };
+    browsers: ['PhantomJS']
+  });
   config.preprocessors[paths.scripts] = 'coverage';
 
   return gulp.src(config.files)
