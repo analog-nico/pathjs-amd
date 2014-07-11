@@ -1,6 +1,5 @@
 .idea
 bower_components
-browserstack.json
 coverage
 node_modules
 sauce.json
