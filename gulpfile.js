@@ -190,14 +190,16 @@ gulp.task('test-on-saucelabs', function () {
         },
         'SL_Firefox': {
             base: 'SauceLabs',
-            browserName: 'firefox',
-            version: '26'
+            browserName: 'firefox'
         },
         'SL_Safari': {
             base: 'SauceLabs',
             browserName: 'safari',
-            platform: 'OS X 10.9',
-            version: '7'
+            platform: 'OS X 10.9'
+        },
+        'SL_Opera': {
+            base: 'SauceLabs',
+            browserName: 'opera'
         },
         'SL_IE_10': {
             base: 'SauceLabs',
@@ -210,6 +212,24 @@ gulp.task('test-on-saucelabs', function () {
             browserName: 'internet explorer',
             platform: 'Windows 8.1',
             version: '11'
+        },
+        'SL_IPHONE_IOS_7.1': {
+            base: 'SauceLabs',
+            browserName: 'iPhone',
+            platform: 'OS X 10.9',
+            version: '7.1'
+        },
+        'SL_IPAD_IOS_7.1': {
+            base: 'SauceLabs',
+            browserName: 'iPad',
+            platform: 'OS X 10.9',
+            version: '7.1'
+        },
+        'SL_ANDROID_4.3': {
+            base: 'SauceLabs',
+            browserName: 'Android',
+            platform: 'Linux',
+            version: '4.3'
         }
     };
 
@@ -238,7 +258,25 @@ gulp.task('test-on-saucelabs-oldies', function () {
             browserName: 'internet explorer',
             platform: 'Windows 7',
             version: '9'
-        }
+        }/*,
+        'SL_IE_8': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows XP',
+            version: '8'
+        },
+        'SL_IE_7': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows XP',
+            version: '7'
+        },
+        'SL_IE_6': {
+            base: 'SauceLabs',
+            browserName: 'internet explorer',
+            platform: 'Windows XP',
+            version: '6'
+        }*/
     };
 
     // http://karma-runner.github.io/0.12/config/configuration-file.html
