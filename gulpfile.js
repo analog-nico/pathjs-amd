@@ -136,7 +136,7 @@ gulp.task('dist-src-min', function () {
 });
 
 gulp.task('ci', function (done) {
-    runSequence('lint', 'test', 'coveralls', 'test-on-saucelabs', 'test-on-saucelabs-oldies', done);
+    runSequence('lint', 'test', 'coveralls', 'test-on-saucelabs-desktop', 'test-on-saucelabs-mobile', 'test-on-saucelabs-oldies', done);
 });
 
 gulp.task('coveralls', function () {
@@ -176,7 +176,7 @@ var karmaSaucelabsConfig = mergeConfig(karmaCommonConfig, {
     captureTimeout: 4 * 60 * 1000 //default 60000
 });
 
-gulp.task('test-on-saucelabs', function () {
+gulp.task('test-on-saucelabs-desktop', function () {
 
     // https://github.com/saucelabs/karma-sauce-example
 
@@ -212,7 +212,29 @@ gulp.task('test-on-saucelabs', function () {
             browserName: 'internet explorer',
             platform: 'Windows 8.1',
             version: '11'
-        },
+        }
+    };
+
+    // http://karma-runner.github.io/0.12/config/configuration-file.html
+
+    var config = mergeConfig(karmaSaucelabsConfig, {
+        customLaunchers: customLaunchers,
+        browsers: Object.keys(customLaunchers)
+    });
+
+    return gulp.src(config.files)
+        .pipe(karma(config));
+
+});
+
+gulp.task('test-on-saucelabs-mobile', function () {
+
+    // https://github.com/saucelabs/karma-sauce-example
+
+    loadSaucelabsCredentials();
+
+    // Browsers to run on Sauce Labs
+    var customLaunchers = {
         'SL_IPHONE_IOS_7.1': {
             base: 'SauceLabs',
             browserName: 'iPhone',
