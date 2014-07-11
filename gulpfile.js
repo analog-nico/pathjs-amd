@@ -14,12 +14,12 @@ var coveralls = require('gulp-coveralls');
 
 
 var paths = {
-  requirejs: 'bower_components/requirejs/require.js',
-  jquery: 'bower_components/jquery/dist/jquery.js',
-  scripts: 'src/**/*.js',
-  specs: 'test/spec/**/*.js',
-  fixtureScripts: 'test/fixtures/**/*.js',
-  fixtureTemplates: 'test/fixtures/**/*.html'
+    requirejs: 'bower_components/requirejs/require.js',
+    jquery: 'bower_components/jquery/dist/jquery.js',
+    scripts: 'src/**/*.js',
+    specs: 'test/spec/**/*.js',
+    fixtureScripts: 'test/fixtures/**/*.js',
+    fixtureTemplates: 'test/fixtures/**/*.html'
 };
 
 var karmaCommonConfig = {
@@ -46,7 +46,7 @@ var karmaCommonConfig = {
 };
 
 function mergeConfig(commonConfig, individualConfig) {
-    return _.merge(_.cloneDeep(commonConfig), individualConfig, function(a, b) {
+    return _.merge(_.cloneDeep(commonConfig), individualConfig, function (a, b) {
         return _.isArray(a) ? a.concat(b) : undefined;
     });
 }
@@ -56,60 +56,60 @@ gulp.task('dev', ['watch', 'lint-and-test']);
 
 gulp.task('watch', function () {
 
-  gulp.watch([
-    paths.scripts,
-    paths.specs,
-    paths.fixtureScripts,
-    paths.fixtureTemplates
-  ], [
-    'lint-and-test'
-  ]);
+    gulp.watch([
+        paths.scripts,
+        paths.specs,
+        paths.fixtureScripts,
+        paths.fixtureTemplates
+    ], [
+        'lint-and-test'
+    ]);
 
-  gulp.watch([
-    'gulpfile.js'
-  ], [
-    'lint'
-  ]);
+    gulp.watch([
+        'gulpfile.js'
+    ], [
+        'lint'
+    ]);
 
 });
 
 gulp.task('lint-and-test', function (done) {
-  runSequence('lint', 'test', done);
+    runSequence('lint', 'test', done);
 });
 
 gulp.task('lint', function () {
 
-  return gulp.src([
-      paths.scripts,
-      paths.specs,
-      paths.fixtureScripts,
-      'gulpfile.js'
-    ])
-    .pipe(jshint())
-    .pipe(jshint.reporter(jshintStylish))
-    .pipe(jshint.reporter('fail'));
+    return gulp.src([
+            paths.scripts,
+            paths.specs,
+            paths.fixtureScripts,
+            'gulpfile.js'
+        ])
+        .pipe(jshint())
+        .pipe(jshint.reporter(jshintStylish))
+        .pipe(jshint.reporter('fail'));
 
 });
 
 gulp.task('test', function () {
 
-  // http://karma-runner.github.io/0.12/config/configuration-file.html
+    // http://karma-runner.github.io/0.12/config/configuration-file.html
 
-  var config = mergeConfig(karmaCommonConfig, {
-    reporters: ['coverage'],
-    coverageReporter: {
-      type : 'lcov',
-      dir : 'coverage/'
-    },
-    plugins: [
-      'karma-coverage'
-    ],
-    browsers: ['PhantomJS']
-  });
-  config.preprocessors[paths.scripts] = 'coverage';
+    var config = mergeConfig(karmaCommonConfig, {
+        reporters: ['coverage'],
+        coverageReporter: {
+            type: 'lcov',
+            dir: 'coverage/'
+        },
+        plugins: [
+            'karma-coverage'
+        ],
+        browsers: ['PhantomJS']
+    });
+    config.preprocessors[paths.scripts] = 'coverage';
 
-  return gulp.src(config.files)
-    .pipe(karma(config));
+    return gulp.src(config.files)
+        .pipe(karma(config));
 
 });
 
@@ -231,10 +231,10 @@ gulp.task('test-on-saucelabs', function () {
 //        },
         // to avoid DISCONNECTED messages when connecting to Saucelabs
         // http://oligofren.wordpress.com/2014/05/27/running-karma-tests-on-browserstack/
-        browserDisconnectTimeout : 10000, // default 2000
-        browserDisconnectTolerance : 1, // default 0
-        browserNoActivityTimeout : 4*60*1000, //default 10000
-        captureTimeout : 4*60*1000 //default 60000
+        browserDisconnectTimeout: 10000, // default 2000
+        browserDisconnectTolerance: 1, // default 0
+        browserNoActivityTimeout: 4 * 60 * 1000, //default 10000
+        captureTimeout: 4 * 60 * 1000 //default 60000
     };
 
     return gulp.src(config.files)
