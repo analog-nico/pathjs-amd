@@ -212,7 +212,7 @@ gulp.task('test-on-saucelabs', function () {
         singleRun: true,
         sauceLabs: {
             testName: 'All tests',
-            startConnect: false // Either install and run Sauce Connect or set this to true
+            startConnect: ((process.env.TRAVIS) ? true : false) // Either install and run Sauce Connect or set this to true
         },
         customLaunchers: customLaunchers,
         browsers: Object.keys(customLaunchers),
