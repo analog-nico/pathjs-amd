@@ -225,3 +225,97 @@ gulp.task('test-on-saucelabs', function () {
         .pipe(karma(config));
 
 });
+
+gulp.task('test-on-browserstack', function () {
+
+    // https://github.com/karma-runner/karma-browserstack-launcher
+
+    // Use ENV vars on Travis and browserstack.json locally to get credentials
+    if (!process.env.BROWSER_STACK_USERNAME) {
+        if (!fs.existsSync('browserstack.json')) {
+            console.log('Create a browserstack.json with your credentials based on the browserstack-sample.json file.');
+            process.exit(1);
+        } else {
+            process.env.BROWSER_STACK_USERNAME = require('./browserstack').username;
+            process.env.BROWSER_STACK_ACCESS_KEY = require('./browserstack').accessKey;
+        }
+    }
+
+    // Browsers to run on Browserstack
+    var customLaunchers = {
+        'BS_Chrome': {
+            base: 'BrowserStack',
+            browser: 'chrome',
+            os: 'OS X',
+            os_version: 'Mountain Lion'
+        },
+        'BS_Safari': {
+            base: 'BrowserStack',
+            browser: 'safari',
+            os: 'OS X',
+            os_version: 'Mountain Lion'
+        },
+        'BS_Firefox': {
+            base: 'BrowserStack',
+            browser: 'firefox',
+            os: 'Windows',
+            os_version: '8'
+        },
+        'BS_IE_9': {
+            base: 'BrowserStack',
+            browser: 'ie',
+            browser_version: '9.0',
+            os: 'Windows',
+            os_version: '7'
+        },
+        'BS_IE_10': {
+            base: 'BrowserStack',
+            browser: 'ie',
+            browser_version: '10.0',
+            os: 'Windows',
+            os_version: '8'
+        },
+        'BS_IE_11': {
+            base: 'BrowserStack',
+            browser: 'ie',
+            browser_version: '11.0',
+            os: 'Windows',
+            os_version: '8.1'
+        }
+    };
+
+    // http://karma-runner.github.io/0.12/config/configuration-file.html
+
+    var config = {
+        frameworks: ['jasmine'],
+        files: [
+            paths.jquery,
+            paths.scripts,
+            paths.fixtureScripts,
+            paths.fixtureTemplates,
+            paths.specs
+        ],
+        preprocessors: {
+            '**/*.html': 'html2js'
+        },
+        // Spec reporter crashes in IE 9 if not using an iframe. Maybe because some Polyfills are missing.
+        reporters: ['dots'],
+        plugins: [
+            'karma-jasmine',
+            'karma-html2js-preprocessor',
+            'karma-spec-reporter',
+            'karma-browserstack-launcher'
+        ],
+        autoWatch: false,
+        singleRun: true,
+        customLaunchers: customLaunchers,
+        browsers: Object.keys(customLaunchers),
+        client: {
+            useIframe: false // Required by IE 9 to allow using the back button
+        }
+    };
+
+    return gulp.src(config.files)
+        .pipe(karma(config));
+
+});
