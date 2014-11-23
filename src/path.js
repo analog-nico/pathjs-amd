@@ -1,11 +1,15 @@
 /* global define */
 ;(function (root, factory) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
+    if (typeof exports === 'object' && typeof module === 'object') {
+        module.exports = factory();
+    } else if (typeof define === 'function' && define.amd) {
         define('path', function () {
             root.Path = factory();
             return root.Path;
         });
+    } else if (typeof exports === 'object') {
+        exports.Path = factory();
     } else {
         root.Path = factory();
     }
