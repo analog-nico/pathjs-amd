@@ -1,6 +1,32 @@
 {
   "name": "pathjs-amd",
-  "description": "See bower.json",
+  "version": "0.10.0",
+  "description": "PathJS is a lightweight, client-side routing library that allows you to create single page applications using Hashes/Hashbangs and/or HTML5 PushState.",
+  "keywords": [
+    "pathjs",
+    "path.js",
+    "router",
+    "route",
+    "routes",
+    "routing",
+    "hash",
+    "hashbang",
+    "pushState"
+  ],
+  "homepage": "https://github.com/analog-nico/pathjs-amd",
+  "bugs": {
+    "url": "https://github.com/analog-nico/pathjs-amd/issues"
+  },
+  "license": "MIT",
+  "author": "Nicolai Kamenzky (https://github.com/analog-nico)",
+  "main": "dist/path.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/analog-nico/pathjs-amd.git"
+  },
+  "scripts": {
+    "test": "node_modules/.bin/gulp ci"
+  },
   "dependencies": {},
   "devDependencies": {
     "gulp": "^3.8.10",
@@ -25,9 +51,5 @@
   },
   "engines": {
     "node": ">=0.10.0"
-  },
-  "private": true,
-  "scripts": {
-    "test": "node_modules/.bin/gulp ci"
   }
 }

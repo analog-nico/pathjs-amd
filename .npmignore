@@ -1,0 +1,11 @@
+.idea/
+bower_components/
+coverage/
+test/
+.editorconfig
+.jshintrc
+.travis.yml
+bower.json
+gulpfile.js
+sauce.json
+sauce-sample.json

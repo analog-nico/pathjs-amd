@@ -1,7 +1,7 @@
 {
   "name": "pathjs-amd",
-  "description": "PathJS is a lightweight, client-side routing library that allows you to create single page apps using Hashbangs and/or HTML5 pushState.",
-  "main": "src/path.js",
+  "description": "PathJS is a lightweight, client-side routing library that allows you to create single page applications using Hashes/Hashbangs and/or HTML5 PushState.",
+  "main": "dist/path.js",
   "license": "MIT",
   "keywords": [
     "pathjs",

@@ -19,7 +19,7 @@
 
     var Path = exports;
 
-    Path.version = '0.9.1';
+    Path.version = '0.10.0';
 
     Path.map = function (path) {
         if (Path.routes.defined.hasOwnProperty(path)) {

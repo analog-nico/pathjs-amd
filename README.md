@@ -1,8 +1,8 @@
 # PathJS
 
-PathJS is a lightweight, client-side routing library that allows you to create "single page" applications using Hashbangs and/or HTML5 pushState.
+PathJS is a lightweight, client-side routing library that allows you to create single page applications using Hashes/Hashbangs and/or HTML5 PushState.
 
-This repository was forked from [mtrpcic/pathjs](https://github.com/mtrpcic/pathjs) for continued maintenance. The latest version in this repository still serves as a drop in replacement for the original version.
+This repository was forked from [mtrpcic/pathjs](https://github.com/mtrpcic/pathjs) for continued maintenance. The latest version in this repository still serves as a drop-in replacement for the original version.
 
 ---
 
@@ -15,10 +15,17 @@ This repository was forked from [mtrpcic/pathjs](https://github.com/mtrpcic/path
 Description forthcoming.
 Visit [mtrpcic/pathjs](https://github.com/mtrpcic/pathjs) in the meantime. The API is still the same.
 
-Additionally it also exposes itself as an AMD module (named 'path') if a module loader like [require.js](http://requirejs.org) is present.
+Additionally, this library
+- can be required as an [**AMD module**](http://requirejs.org/docs/whyamd.html#amd),
+- is [CommonJS Modules/1.0](http://wiki.commonjs.org/wiki/Modules/1.0) compatible, and
+- can be used with [**Webpack**](http://webpack.github.io) and [**Browserify**](http://browserify.org).
 
 # Change History
 
+- 0.10.0 (2014-11-24)
+    - **Breaking Change**: If a AMD module loader is present this library no longer exposes itself as a named module but instead as an anonymous module - in alignment to [common practice](https://github.com/jrburke/requirejs/wiki/Updating-existing-libraries#register-as-an-anonymous-module-).
+    - Extended the module wrapper to also support CommonJS
+    - Added tests to ensure compatibility with Webpack and Browserify
 - 0.9.1 (2014-07-09)
     - Fixed AMD definition
 - 0.9.0 (2014-07-09)
