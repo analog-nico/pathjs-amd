@@ -11,10 +11,7 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var fs = require('fs');
 var coveralls = require('gulp-coveralls');
-var webpack = require('webpack');
-var BPromise = require('bluebird');
-var gutil = require('gulp-util');
-var map = require('vinyl-map');
+var webpack = require('gulp-webpack');
 var browserify = require('gulp-browserify');
 
 
@@ -25,8 +22,7 @@ var paths = {
     specs: 'test/spec/**/*.js',
     fixtureScripts: 'test/fixtures/**/*.js',
     fixtureTemplates: 'test/fixtures/**/*.html',
-    testBuildFiles: 'test/build/**/*',
-    webpackConfig: 'test/build/webpack/webpack.config.js'
+    testBuildFiles: 'test/build/**/*'
 };
 
 var karmaCommonConfig = {
@@ -112,53 +108,15 @@ gulp.task('build-test', function (done) {
     runSequence('build-test-webpack', 'build-test-browserify', done);
 });
 
-gulp.task('build-test-webpack', function (done) {
+gulp.task('build-test-webpack', function () {
 
-    var configFileNames = [];
-
-    function pack(configFileName) {
-
-        return new BPromise(function (resolve, reject) {
-
-            delete require.cache[configFileName];
-
-            webpack(require(configFileName), function(err, stats) {
-
-                if (err) {
-                    throw new gutil.PluginError("webpack", err);
-                }
-
-                gutil.log("[webpack]", stats.toString());
-
-                resolve();
-
-            });
-
-        });
-
-    }
-
-    gulp.src(paths.webpackConfig)
-        .pipe(map(function (contents, filename) {
-            configFileNames.push(filename);
-        }))
-        .on('end', function () {
-
-            var lastPromise = BPromise.resolve();
-
-            for ( var i = 0; i < configFileNames.length; i+=1 ) {
-                lastPromise = lastPromise.then(pack(configFileNames[i]));
+    return gulp.src('test/build/webpack/entry.js')
+        .pipe(webpack({
+            output: {
+                filename: 'bundle.js'
             }
-
-            lastPromise
-                .then(function () {
-                    done();
-                })
-                .catch(function (err) {
-                    done(err);
-                });
-
-        });
+        }))
+        .pipe(gulp.dest('test/fixtures/webpack'));
 
 });
 

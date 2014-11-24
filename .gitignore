@@ -4,3 +4,4 @@ coverage
 node_modules
 sauce.json
 test/fixtures/browserify/app.js
+test/fixtures/webpack/bundle.js
