@@ -5,6 +5,7 @@
         // AMD
         define(['exports'], function (exports) {
             factory(exports);
+            root.Path = exports;
         });
     } else if (typeof exports === 'object') {
         // CommonJS Modules/1.0
