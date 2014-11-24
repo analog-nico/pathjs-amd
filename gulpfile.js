@@ -11,6 +11,10 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var fs = require('fs');
 var coveralls = require('gulp-coveralls');
+var webpack = require('webpack');
+var BPromise = require('bluebird');
+var gutil = require('gulp-util');
+var map = require('vinyl-map');
 
 
 var paths = {
@@ -19,7 +23,9 @@ var paths = {
     scripts: 'src/**/*.js',
     specs: 'test/spec/**/*.js',
     fixtureScripts: 'test/fixtures/**/*.js',
-    fixtureTemplates: 'test/fixtures/**/*.html'
+    fixtureTemplates: 'test/fixtures/**/*.html',
+    testBuildFiles: 'test/build/**/*',
+    webpackConfig: 'test/build/webpack/webpack.config.js'
 };
 
 var karmaCommonConfig = {
@@ -27,7 +33,7 @@ var karmaCommonConfig = {
     files: [
         paths.jquery,
         paths.scripts,
-        paths.fixtureScripts,
+        { pattern: paths.fixtureScripts, included: false },
         paths.fixtureTemplates,
         paths.specs,
         { pattern: paths.requirejs, included: false }
@@ -70,7 +76,8 @@ gulp.task('watch', function () {
         paths.scripts,
         paths.specs,
         paths.fixtureScripts,
-        paths.fixtureTemplates
+        paths.fixtureTemplates,
+        paths.testBuildFiles
     ], [
         'lint-and-test'
     ]);
@@ -92,7 +99,6 @@ gulp.task('lint', function () {
     return gulp.src([
             paths.scripts,
             paths.specs,
-            paths.fixtureScripts,
             'gulpfile.js'
         ])
         .pipe(jshint())
@@ -101,7 +107,61 @@ gulp.task('lint', function () {
 
 });
 
-gulp.task('test', function () {
+gulp.task('build-test', function (done) {
+    runSequence('build-test-webpack', done);
+});
+
+gulp.task('build-test-webpack', function (done) {
+
+    var configFileNames = [];
+
+    function pack(configFileName) {
+
+        return new BPromise(function (resolve, reject) {
+
+            delete require.cache[configFileName];
+
+            webpack(require(configFileName), function(err, stats) {
+
+                if (err) {
+                    throw new gutil.PluginError("webpack", err);
+                }
+
+                gutil.log("[webpack]", stats.toString());
+
+                resolve();
+
+            });
+
+        });
+
+    }
+
+    gulp.src(paths.webpackConfig)
+        .pipe(map(function (contents, filename) {
+            configFileNames.push(filename);
+        }))
+        .on('end', function () {
+
+            var lastPromise = BPromise.resolve();
+
+            for ( var i = 0; i < configFileNames.length; i+=1 ) {
+                lastPromise = lastPromise.then(pack(configFileNames[i]));
+            }
+
+            lastPromise
+                .then(function () {
+                    done();
+                })
+                .catch(function (err) {
+                    done(err);
+                });
+
+        });
+
+});
+
+gulp.task('test', ['build-test'], function () {
 
     // http://karma-runner.github.io/0.12/config/configuration-file.html
 
@@ -186,7 +246,7 @@ var karmaSaucelabsConfig = mergeConfig(karmaCommonConfig, {
     captureTimeout: 4 * 60 * 1000 //default 60000
 });
 
-gulp.task('test-on-saucelabs-desktop', function () {
+gulp.task('test-on-saucelabs-desktop', ['build-test'], function () {
 
     // https://github.com/saucelabs/karma-sauce-example
 
@@ -237,7 +297,7 @@ gulp.task('test-on-saucelabs-desktop', function () {
 
 });
 
-gulp.task('test-on-saucelabs-mobile', function () {
+gulp.task('test-on-saucelabs-mobile', ['build-test'], function () {
 
     // https://github.com/saucelabs/karma-sauce-example
 
@@ -277,7 +337,7 @@ gulp.task('test-on-saucelabs-mobile', function () {
 
 });
 
-gulp.task('test-on-saucelabs-oldies', function () {
+gulp.task('test-on-saucelabs-oldies', ['build-test'], function () {
 
     // https://github.com/saucelabs/karma-sauce-example
 

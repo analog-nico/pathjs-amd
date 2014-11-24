@@ -132,4 +132,6 @@ describe('The hash routes', function () {
 
     });
 
+    // FIXME: If Path.map(...).enter(...) is defined and Path.map(...).to(...) is not then an error is thrown once the route is visited.
+
 });
