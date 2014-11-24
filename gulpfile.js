@@ -15,6 +15,7 @@ var webpack = require('webpack');
 var BPromise = require('bluebird');
 var gutil = require('gulp-util');
 var map = require('vinyl-map');
+var browserify = require('gulp-browserify');
 
 
 var paths = {
@@ -33,10 +34,10 @@ var karmaCommonConfig = {
     files: [
         paths.jquery,
         paths.scripts,
-        { pattern: paths.fixtureScripts, included: false },
+        paths.fixtureScripts,
         paths.fixtureTemplates,
         paths.specs,
-        { pattern: paths.requirejs, included: false }
+        paths.requirejs // Must be after paths.scripts so that path.js is not loaded as an AMD module
     ],
     preprocessors: {
         '**/*.html': 'html2js'
@@ -108,7 +109,7 @@ gulp.task('lint', function () {
 });
 
 gulp.task('build-test', function (done) {
-    runSequence('build-test-webpack', done);
+    runSequence('build-test-webpack', 'build-test-browserify', done);
 });
 
 gulp.task('build-test-webpack', function (done) {
@@ -158,6 +159,14 @@ gulp.task('build-test-webpack', function (done) {
                 });
 
         });
+
+});
+
+gulp.task('build-test-browserify', function () {
+
+    return gulp.src('test/build/browserify/app.js')
+        .pipe(browserify())
+        .pipe(gulp.dest('test/fixtures/browserify'));
 
 });
 

@@ -15,24 +15,20 @@ describe('The UMD wrapper', function () {
 
     it('should allow AMD loading', function (done) {
 
-        $.getScript('/base/bower_components/requirejs/require.js', function () {
+        expect(!!window.require).toBe(true);
+        expect(!!window.define).toBe(true);
 
-            expect(!!window.require).toBe(true);
-            expect(!!window.define).toBe(true);
+        require(['base/src/path'], function (path) {
 
-            require(['base/src/path'], function (path) {
+            expect(!!path).toBe(true);
 
-                expect(!!path).toBe(true);
-
-                path.map('#AMD').to(function () {
-                    done();
-                });
-
-                path.listen();
-
-                location.hash = '#AMD';
-
+            path.map('#AMD').to(function () {
+                done();
             });
+
+            path.listen();
+
+            location.hash = '#AMD';
 
         });
 
@@ -40,19 +36,29 @@ describe('The UMD wrapper', function () {
 
     it('should allow using a Webpack bundle', function (done) {
 
-        $.getScript('/base/test/fixtures/webpack/bundle.js', function () {
+        expect(!!window.PathWP).toBe(true);
 
-            expect(!!window.PathWP).toBe(true);
-
-            window.PathWP.map('#WP').to(function () {
-                done();
-            });
-
-            window.PathWP.listen();
-
-            location.hash = '#WP';
-
+        window.PathWP.map('#WP').to(function () {
+            done();
         });
+
+        window.PathWP.listen();
+
+        location.hash = '#WP';
+
+    });
+
+    it('should allow using a Browserify bundle', function (done) {
+
+        expect(!!window.PathBFY).toBe(true);
+
+        window.PathBFY.map('#BFY').to(function () {
+            done();
+        });
+
+        window.PathBFY.listen();
+
+        location.hash = '#BFY';
 
     });
 
