@@ -29,7 +29,8 @@ var karmaCommonConfig = {
         paths.scripts,
         paths.fixtureScripts,
         paths.fixtureTemplates,
-        paths.specs
+        paths.specs,
+        { pattern: paths.requirejs, included: false }
     ],
     preprocessors: {
         '**/*.html': 'html2js'
@@ -48,6 +49,15 @@ var karmaCommonConfig = {
 function mergeConfig(commonConfig, individualConfig) {
     return _.merge(_.cloneDeep(commonConfig), individualConfig, function (a, b) {
         return _.isArray(a) ? a.concat(b) : undefined;
+    });
+}
+
+function getConfigFiles(config) {
+    return _.map(config.files, function (file) {
+        if (_.isPlainObject(file)) {
+            return file.pattern;
+        }
+        return file;
     });
 }
 
@@ -108,7 +118,7 @@ gulp.task('test', function () {
     });
     config.preprocessors[paths.scripts] = 'coverage';
 
-    return gulp.src(config.files)
+    return gulp.src(getConfigFiles(config))
         .pipe(karma(config));
 
 });
@@ -222,7 +232,7 @@ gulp.task('test-on-saucelabs-desktop', function () {
         browsers: Object.keys(customLaunchers)
     });
 
-    return gulp.src(config.files)
+    return gulp.src(getConfigFiles(config))
         .pipe(karma(config));
 
 });
@@ -262,7 +272,7 @@ gulp.task('test-on-saucelabs-mobile', function () {
         browsers: Object.keys(customLaunchers)
     });
 
-    return gulp.src(config.files)
+    return gulp.src(getConfigFiles(config))
         .pipe(karma(config));
 
 });
@@ -308,7 +318,7 @@ gulp.task('test-on-saucelabs-oldies', function () {
     // Spec reporter crashes in IE 9 if not using an iframe. Maybe because some Polyfills are missing.
     config.reporters = ['dots', 'saucelabs'];
 
-    return gulp.src(config.files)
+    return gulp.src(getConfigFiles(config))
         .pipe(karma(config));
 
 });
