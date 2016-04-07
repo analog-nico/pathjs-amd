@@ -1,6 +1,6 @@
 {
   "name": "pathjs-amd",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "PathJS is a lightweight, client-side routing library that allows you to create single page applications using Hashes/Hashbangs and/or HTML5 PushState.",
   "keywords": [
     "pathjs",

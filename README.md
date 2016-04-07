@@ -1,5 +1,13 @@
 # PathJS
 
+---
+
+## This package is not maintained. Don't use it anymore!
+
+The code contains known bugs and I personally switched to using a different router.
+
+---
+
 PathJS is a lightweight, client-side routing library that allows you to create single page applications using Hashes/Hashbangs and/or HTML5 PushState.
 
 This repository was forked from [mtrpcic/pathjs](https://github.com/mtrpcic/pathjs) for continued maintenance. The latest version in this repository still serves as a drop-in replacement for the original version.
@@ -22,6 +30,8 @@ Additionally, this library
 
 # Change History
 
+- 0.10.1 (2016-04-07)
+    - THIS PACKAGE IS NOT MAINTAINED.
 - 0.10.0 (2014-11-24)
     - **Breaking Change**: If a AMD module loader is present this library no longer exposes itself as a named module but instead as an anonymous module - in alignment to [common practice](https://github.com/jrburke/requirejs/wiki/Updating-existing-libraries#register-as-an-anonymous-module-).
     - Extended the module wrapper to also support CommonJS
